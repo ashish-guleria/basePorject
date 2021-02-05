@@ -85,14 +85,13 @@ module.exports = [
         }
     },
 
-
     {
         method: 'POST',
         path: '/user/verifyDevice',
         config: {
             description: 'verifyDevice',
             auth: false,
-            tags: ['api', 'user'],
+            tags: ['api', 'verifyDevice'],
             handler: (request, reply) => {
 
                 return Controller.User.verifyUser(request.payload, request.auth.credentials)
@@ -112,6 +111,7 @@ module.exports = [
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
                 failAction: UniversalFunctions.failActionFunction
             },
+            
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form'
@@ -119,6 +119,4 @@ module.exports = [
             }
         }
     },
-
-   
 ]

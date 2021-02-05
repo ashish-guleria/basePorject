@@ -48,19 +48,12 @@ const verifyUser = async (payload) => {
 
     const { otp, userId } = payload
     let result = await DAO.getDataOne(Models.User, { _id: userId }, {}, {});
-    console.log(result._id)
-    if (otp === result.otp) {
-        var verify = {
+    if (otp !== result.otp) throw ERROR.INCORRECT_DETAILS;
+
+        verify = {
             isVerify: true
         }
-    } else {
-        verify = {
-            isVerify: false
-        }
-    }
-    console.log(result)
-
-
+    
     let tokenData = {
         _id: result._id,
     };
@@ -68,12 +61,8 @@ const verifyUser = async (payload) => {
     const data = await DAO.findAndUpdate(Models.User, { _id: result._id }, verify, { new: true });
     const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
 
-
     return {accessToken, data}
 }
-
-
-
 
 const Login = async (payload) => {
 
