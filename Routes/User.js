@@ -106,8 +106,8 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    user:Joi.string().required(),
-                    //otp: Joi.number().required(),
+                    userId:Joi.string().required(),
+                    otp: Joi.number().required(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
                 failAction: UniversalFunctions.failActionFunction
