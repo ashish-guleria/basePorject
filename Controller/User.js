@@ -7,7 +7,6 @@ const DAO = require('../DAOManager').queries,
     Bcrypt = require('bcryptjs'),
     otp = require('../Libs/otp');
 
-
 const SignUp = async (payload) => {
 
     let query = {
@@ -68,11 +67,7 @@ const verifyUser=async (payload)=>{
    
 }
 
-
-
-
 const Login = async (payload) => {
-
 
     try {
         const { email, password } = payload;
