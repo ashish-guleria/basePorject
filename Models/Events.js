@@ -5,11 +5,12 @@ var Schema = mongoose.Schema;
 var Config = require('../Config');
 
 var Event = new Schema({
+    eventName:{type:String},
     venue: { Name: { type: String }, coordinates: [Number] },
+    venue: { type: String  },
     price: { type: Number },
-    startingTime: { tpye: Number },
-    endingTime: { type: Number },
-    date: { type: Date, default: Date.now },
+    startingTime: { type : Number },
+    endingTime: { type : Number },
     description: { type: String },
     guestLimit: { type: Number },
     Category: {
@@ -24,6 +25,7 @@ var Event = new Schema({
     },
     hostingEventAs: { type: String },
     partyImage: [{ type: String }],
+    userId:{ type: Schema.ObjectId, ref: 'User' },
     rating: [{
         userId: { type: Schema.ObjectId, ref: 'User' },
         rate: { type: Number, require: true },
@@ -42,7 +44,8 @@ var Event = new Schema({
         rejected: [{ type: Schema.ObjectId, ref: 'User' }],
 
         userPressNah:[{type:Schema.ObjectId, ref:'User'}]
-    }
+    },
+
 })
 
 module.exports = mongoose.model('Event', Event);

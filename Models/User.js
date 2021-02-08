@@ -24,7 +24,7 @@ var User = new Schema({
     imgUrl: [{ type: String }],
     otp: { type: Number },
     verifyId: { type: String },
-    isVerify:{type:Boolean},
+    isVerify:{type:Boolean,default:false},
 })
 
 module.exports = mongoose.model('User', User);

@@ -19,16 +19,16 @@ const SignUp = async (payload) => {
     }
 
     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    var newOtp=await otp.otp()
-    
-    let saveData={
-        email:payload.email,
-        fullName:payload.fullName,
-        gender:payload.gender,
-        dob:payload.dob,
-        phoneNumber:payload.phoneNumber,
-        password:payload.password,
-        otp:newOtp
+    var newOtp = await otp.otp(payload.phoneNumber)
+
+    let saveData = {
+        email: payload.email,
+        fullName: payload.fullName,
+        gender: payload.gender,
+        dob: payload.dob,
+        phoneNumber: payload.phoneNumber,
+        password: payload.password,
+        otp: newOtp
     }
     result = await DAO.saveData(Models.User, saveData);
 
@@ -39,32 +39,33 @@ const SignUp = async (payload) => {
     };
     const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
     return {
-        accessToken,
-        user: {
-            ...payload
-        }
+        result
     }
 }
 
-const verifyUser=async (payload)=>{
+const verifyUser = async (payload) => {
 
-    const {otp,userId}=payload
-    
-    let result = await DAO.getData(Models.User, userId, {}, {});
-   // console.log(result[0].otp)
-    if(otp===result[0].otp){
-        var verify={
-            isVerify:true
-        }
-    }else{
-        verify={
+    const { otp, userId } = payload
+    let result = await DAO.getDataOne(Models.User, { _id: userId }, {}, {});
+    if (otp !== result.otp) throw ERROR.INCORRECT_DETAILS;
 
-            isVerify:false
+        verify = {
+            isVerify: true
         }
-    }
     
+<<<<<<< HEAD
    const data = await DAO.findAndUpdate(Models.User,{_id:result[0]._id}, verify,{new: true});
    
+=======
+    let tokenData = {
+        _id: result._id,
+    };
+
+    const data = await DAO.findAndUpdate(Models.User, { _id: result._id }, verify, { new: true });
+    const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
+
+    return {accessToken, data}
+>>>>>>> c141190460578fa72785c0568eb9c0b1cd07d98f
 }
 
 const Login = async (payload) => {
@@ -87,7 +88,7 @@ const Login = async (payload) => {
             scope: Config.APP_CONSTANTS.SCOPE.USER,
             _id: result._id,
             time: new Date(),
-            // exp:Math.floor(Date.now() / 1000) + 1800
+            
         };
 
         const accessToken = await TokenManager.GenerateToken(tokenData, Config.APP_CONSTANTS.SCOPE.USER);
@@ -108,6 +109,6 @@ const Login = async (payload) => {
 
 module.exports = {
     SignUp,
-    Login, 
+    Login,
     verifyUser
 }

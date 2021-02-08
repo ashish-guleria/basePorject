@@ -36,7 +36,8 @@ module.exports = [
                     ),
                     dob: Joi.string().required(),
                     phoneNumber: Joi.string(),
-                    password: Joi.string(),
+                    password: Joi.string()
+                    
                     
                     
                 }),
@@ -85,14 +86,13 @@ module.exports = [
         }
     },
 
-
     {
         method: 'POST',
         path: '/user/verifyDevice',
         config: {
             description: 'verifyDevice',
             auth: false,
-            tags: ['api', 'user'],
+            tags: ['api', 'verifyDevice'],
             handler: (request, reply) => {
 
                 return Controller.User.verifyUser(request.payload, request.auth.credentials)
@@ -106,12 +106,13 @@ module.exports = [
             },
             validate: {
                 payload: Joi.object({
-                    user:Joi.string().required(),
+                    userId:Joi.string().required(),
                     otp: Joi.number().required(),
                 }),
                 headers: UniversalFunctions.authorizationHeaderObjOptional,
                 failAction: UniversalFunctions.failActionFunction
             },
+            
             plugins: {
                 'hapi-swagger': {
                     payloadType: 'form'
@@ -119,6 +120,4 @@ module.exports = [
             }
         }
     },
-
-   
 ]
