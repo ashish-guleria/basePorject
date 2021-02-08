@@ -31,8 +31,8 @@ module.exports = [
                 payload: Joi.object({
                     eventName: Joi.string(),
                     venue: Joi.string(),
-                    startingTime: Joi.string(),
-                    endingTime: Joi.string(),
+                    startingTime: Joi.number(),
+                    endingTime: Joi.number(),
                     description: Joi.string().required(),
                     gestLimit: Joi.string(),
                     category: Joi.string().valid(
@@ -41,10 +41,9 @@ module.exports = [
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.PARTY_TYPE.BIRTHDAY,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.PARTY_TYPE.DRINKING,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.PARTY_TYPE.MUSIC,
-
                     ),
                     hostingEventAs: Joi.string(),
-                    partyImages: Joi.array().items(Joi.string())
+                    partyImages: Joi.array().items(Joi.string()),
                 }),
 
                 failAction: UniversalFunctions.failActionFunction

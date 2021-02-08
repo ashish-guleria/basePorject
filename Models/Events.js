@@ -6,11 +6,11 @@ var Config = require('../Config');
 
 var Event = new Schema({
     eventName:{type:String},
-    //venue: { Name: { type: String }, coordinates: [Number] },
+    venue: { Name: { type: String }, coordinates: [Number] },
     venue: { type: String  },
     price: { type: Number },
-    startingTime: { type : Date },
-    endingTime: { type : Date },
+    startingTime: { type : Number },
+    endingTime: { type : Number },
     description: { type: String },
     guestLimit: { type: Number },
     Category: {
@@ -46,7 +46,6 @@ var Event = new Schema({
         userPressNah:[{type:Schema.ObjectId, ref:'User'}]
     },
 
-    test:{type: {type: String,enum: ['Point'],required: true},coordinates: {type: [Number],required: true}}
 })
 
 module.exports = mongoose.model('Event', Event);
