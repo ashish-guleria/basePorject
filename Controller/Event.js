@@ -16,15 +16,15 @@ const createEvent = async (payload) => {
     };
     console.log(query)
     let result = await DAO.getDataOne(Models.Event, query, { startingTime: 1,endingTime:1,venue:1}, { limit: 1 });
-    // if (result!==null) {
-    //     if (result.venue == venue) {
+    if (result!==null) {
+        if (result.venue == venue) {
 
-    //         if (startingTime.getTime() == result.startingTime.getTime()) {
-    //             if (endingTime.getTime() == result.endingTime.getTime()) throw ERROR.INVALID_OPERATION
-    //         }
-    //     }
-    // }
-   //  result = await DAO.saveData(Models.Event, payload);
+            if (startingTime.getTime() == result.startingTime.getTime()) {
+                if (endingTime.getTime() == result.endingTime.getTime()) throw ERROR.INVALID_OPERATION
+            }
+        }
+    }
+    result = await DAO.saveData(Models.Event, payload);
 
 console.log(startingTime,result.startingTime,endingTime,result.endingTime)
     if ( startingTime  >=result.startingTime  &&  startingTime <=result.endingTime) {
