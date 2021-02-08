@@ -1,4 +1,5 @@
 const User = require('./User');
+const Event=require('./Event')
 
 
 
@@ -7,7 +8,8 @@ const User = require('./User');
 
 const all = [].concat(
      
-     User
+     User,
+     Event
 );
 module.exports = all;
 

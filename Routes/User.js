@@ -37,6 +37,7 @@ module.exports = [
                     dob: Joi.string().required(),
                     phoneNumber: Joi.string(),
                     password: Joi.string(),
+                    test:Joi.string()
                     
                     
                 }),
