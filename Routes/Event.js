@@ -31,8 +31,8 @@ module.exports = [
                 payload: Joi.object({
                     eventName: Joi.string(),
                     venue: Joi.string(),
-                    startingTime: Joi.number(),
-                    endingTime: Joi.number(),
+                    startingTime: Joi.date(),
+                    endingTime: Joi.date(),
                     description: Joi.string().required(),
                     gestLimit: Joi.string(),
                     category: Joi.string().valid(

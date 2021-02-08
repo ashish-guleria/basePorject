@@ -9,8 +9,8 @@ var Event = new Schema({
     venue: { Name: { type: String }, coordinates: [Number] },
     venue: { type: String  },
     price: { type: Number },
-    startingTime: { type : Number },
-    endingTime: { type : Number },
+    startingTime: { type : Date },
+    endingTime: { type : Date },
     description: { type: String },
     guestLimit: { type: Number },
     Category: {
