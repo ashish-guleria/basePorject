@@ -106,8 +106,23 @@ const Login = async (payload) => {
     }
 }
 
+const changePassword=async (payload,userDetail)=>{
+    var {oldPassword,newPassword}=payload
+
+    var checkPassword = Bcrypt.compareSync(oldPassword, userDetail.password);
+    if(!checkPassword) throw ERROR.INVALID_CREDENTIALS
+
+    newPassword = Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);  
+    console.log(userDetail._id,newPassword)
+ 
+     const result=await DAO.findAndUpdate(Models.User,{_id:userDetail._id},{password:newPassword},{})
+
+   return(result)
+
+}
 module.exports = {
     SignUp,
     Login, 
-    verifyUser
+    verifyUser,
+    changePassword
 }

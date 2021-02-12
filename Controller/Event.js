@@ -22,15 +22,18 @@ const createEvent = async (payload) => {
             || endingTime.getTime()  >=result.startingTime.getTime()  &&  endingTime.getTime() <=result.endingTime.getTime()) {
                 throw ERROR.INCORRECT_DETAILS
     }
-     result = await DAO.saveData(Models.Event, payload);
 
 
-        
-      
+
+     result = await DAO.saveData(Models.Event, payload);      
         }
     }
     return result
 }
+
+
+
+
 
 
 module.exports = {

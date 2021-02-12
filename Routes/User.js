@@ -120,4 +120,49 @@ module.exports = [
             }
         }
     },
+
+
+    {
+        method: 'GET',
+        path: '/user/changePassword',
+        config: {
+            description: 'changePassword',
+            auth: {
+                strategies:[Config.APP_CONSTANTS.SCOPE.USER]
+            },
+            tags: ['api', 'admin'],
+            handler: (request, reply)=> {
+                
+                return Controller.User.changePassword(request.query, request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+                query: Joi.object({
+                    oldPassword:Joi.string(),
+                    newPassword:Joi.string()
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
+
+
+
+
+
+
+
+
 ]
