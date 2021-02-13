@@ -12,7 +12,6 @@ const fs = require('fs')
 
 const createEvent = async (payload,userDetail) => {
 
-
     let query={
         userId:userDetail._id,
         eventName:payload.eventName,
@@ -26,8 +25,6 @@ const createEvent = async (payload,userDetail) => {
         partyImage:payload.partyImage
     }
 
-
-    console.log(query)
     //let result = await DAO.getDataOne(Models.Event, query, { startingTime: 1, endingTime: 1, venue: 1 }, { limit: 1 });
     // if (result !== null) {
     //     if (result.venue == venue) {
@@ -44,9 +41,12 @@ const createEvent = async (payload,userDetail) => {
 return result
 }
 
+const viewParty= async (payload,userDetail)=>{
 
+    let result = await DAO.getData(Models.Event,{})
+    return
 
-
+}
 
 
 const images = async (request) => {
@@ -74,5 +74,6 @@ const images = async (request) => {
 
 module.exports = {
     createEvent,
-    images
+    images,
+    viewParty
 }

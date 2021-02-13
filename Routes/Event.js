@@ -67,6 +67,42 @@ module.exports = [
     },
 
     {
+        method: 'get',
+        path: '/event/getEvent',
+        config: {
+            description: 'getEvent',
+            auth: {strategies:[Config.APP_CONSTANTS.SCOPE.USER]},
+            tags: ['api', 'create'],
+            handler: (request, reply) => {
+                //console.log("err")
+                return Controller.Event.createEvent(request.query,request.auth.credentials)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+            validate: {
+
+                query: Joi.object({
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+
+                failAction: UniversalFunctions.failActionFunction
+            },
+            plugins: {
+                'hapi-swagger': {
+                   payloadType: 'form'
+                }
+            }
+        }
+    },
+
+
+
+    {
         method: 'POST',
         path: '/event/images',
         config: {
