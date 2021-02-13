@@ -120,9 +120,27 @@ const changePassword=async (payload,userDetail)=>{
    return(result)
 
 }
+
+const editProfile=async(payload,userDetail)=>{
+    query={
+        name:payload.name,
+        gender:payload.gender,
+        dob:payload.dob,
+        bio:payload.bio
+    }
+
+    let result=await DAO.findAndUpdate(Models.User,{_id:userDetail._id},query)
+
+
+    console.log(payload,"---------------------------------------",userDetail)
+
+    return result
+}
+
 module.exports = {
     SignUp,
     Login, 
     verifyUser,
-    changePassword
+    changePassword,
+    editProfile
 }

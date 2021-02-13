@@ -7,18 +7,19 @@ const ERROR = Config.responseMessages.ERROR;
 const winston = require('winston');
 const otp = require('../Libs/otp')
 
-module.exports = [
 
+
+module.exports = [
     {
         method: 'POST',
         path: '/event/create',
         config: {
             description: 'create',
-            auth: false,
+            auth: {strategies:[Config.APP_CONSTANTS.SCOPE.USER]},
             tags: ['api', 'create'],
             handler: (request, reply) => {
                 //console.log("err")
-                return Controller.Event.createEvent(request.payload)
+                return Controller.Event.createEvent(request.payload,request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -28,9 +29,15 @@ module.exports = [
                     });
             },
             validate: {
+
                 payload: Joi.object({
+                    
                     eventName: Joi.string(),
-                    venue: Joi.string(),
+                    venue: Joi.object({
+                        name:Joi.string(),
+                        coordinates:Joi.array().items(Joi.number())
+                    }),
+
                     startingTime: Joi.date(),
                     endingTime: Joi.date(),
                     description: Joi.string().required(),
@@ -42,22 +49,55 @@ module.exports = [
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.PARTY_TYPE.DRINKING,
                         Config.APP_CONSTANTS.DATABASE_CONSTANT.PARTY_TYPE.MUSIC,
                     ),
+
                     hostingEventAs: Joi.string(),
                     partyImages: Joi.array().items(Joi.string()),
+
                 }),
+                headers: UniversalFunctions.authorizationHeaderObj,
 
                 failAction: UniversalFunctions.failActionFunction
             },
             plugins: {
                 'hapi-swagger': {
-                    payloadType: 'form'
+                  //  payloadType: 'form'
                 }
             }
         }
     },
 
+    {
+        method: 'POST',
+        path: '/event/images',
+        config: {
+            description: 'images',
+            auth: false,
+            tags: ['api', 'images'],
+            handler: (request, reply) => {
+                //console.log("err")
+                return Controller.Event.images(request, reply)
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
 
-
+            payload: {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 200000000 * 1000 * 1000
+            },
+            
+            plugins: {
+                'hapi-swagger': {
+                   payloadType: 'form'
+                }
+            }
+        }
+    },
 
 ]
-
