@@ -4,25 +4,26 @@ const DAO = require('../DAOManager').queries,
     Config = require('../Config'),
     ERROR = Config.responseMessages.ERROR,
     UniversalFunctions = require('../Utils/UniversalFunctions'),
-    Models = require('../Models');
-const fs = require('fs')
+    Models = require('../Models'),
+    upload=require('../Libs/uploadManager'),
+    fs = require('fs');
 
 
 
 
-const createEvent = async (payload,userDetail) => {
+const createEvent = async (payload, userDetail) => {
 
-    let query={
-        userId:userDetail._id,
-        eventName:payload.eventName,
-        venue:payload.venue,
-        startingTime:payload.startingTime,
-        endingTime:payload.endingTime,
-        description:payload.description,
-        gestLimit:payload.gestLimit,
-        category:payload.category,
-        hostingEventAs:payload.hostingEventAs,
-        partyImage:payload.partyImage
+    let query = {
+        userId: userDetail._id,
+        eventName: payload.eventName,
+        venue: payload.venue,
+        startingTime: payload.startingTime,
+        endingTime: payload.endingTime,
+        description: payload.description,
+        gestLimit: payload.gestLimit,
+        category: payload.category,
+        hostingEventAs: payload.hostingEventAs,
+        partyImage: payload.partyImage
     }
 
     //let result = await DAO.getDataOne(Models.Event, query, { startingTime: 1, endingTime: 1, venue: 1 }, { limit: 1 });
@@ -37,40 +38,31 @@ const createEvent = async (payload,userDetail) => {
 
     result = await DAO.saveData(Models.Event, query);
 
-    
+
+    return result
+}
+
+const viewParty = async (payload, userDetail) => {
+
+    let result = await DAO.getData(Models.Event, {}, {})
+    console.log(result)
+    return result
+
+}
+
+
+const images = async (payload) => {
+     
+   
+    let result= await upload.upload(payload)
+    //console.log("result")
+
+
+    //console.log("--------------------------",request.payload)
+
 return result
-}
-
-const viewParty= async (payload,userDetail)=>{
-
-    let result = await DAO.getData(Models.Event,{})
-    return
 
 }
-
-
-const images = async (request) => {
-    try {
-        var result = [];
-        for (var i = 0; i < request.payload["file"].length; i++) {
-            console.log(i)
-            result.push(request.payload["file"][i].hapi);
-            const well = request.payload["file"][i].pipe(fs.createWriteStream("./images/" + request.payload["file"][i].hapi.filename))
-            console.log(well.path)
-        }
-        console.log("upload sucessfilly")
-        return (result);
-    } catch (err) {
-        console.log(err)
-
-    }
-
-}
-
-
-
-
-
 
 module.exports = {
     createEvent,

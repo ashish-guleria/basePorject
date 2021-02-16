@@ -5,7 +5,8 @@ const Config = require('../Config');
 const SUCCESS = Config.responseMessages.SUCCESS;
 const ERROR = Config.responseMessages.ERROR;
 const winston = require('winston');
-const otp = require('../Libs/otp')
+const otp = require('../Libs/otp');
+const { array } = require('@hapi/joi');
 
 
 
@@ -15,11 +16,11 @@ module.exports = [
         path: '/event/create',
         config: {
             description: 'create',
-            auth: {strategies:[Config.APP_CONSTANTS.SCOPE.USER]},
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
             tags: ['api', 'create'],
             handler: (request, reply) => {
                 //console.log("err")
-                return Controller.Event.createEvent(request.payload,request.auth.credentials)
+                return Controller.Event.createEvent(request.payload, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -31,11 +32,11 @@ module.exports = [
             validate: {
 
                 payload: Joi.object({
-                    
+
                     eventName: Joi.string(),
                     venue: Joi.object({
-                        name:Joi.string(),
-                        coordinates:Joi.array().items(Joi.number())
+                        name: Joi.string(),
+                        coordinates: Joi.array().items(Joi.number())
                     }),
 
                     startingTime: Joi.date(),
@@ -60,7 +61,7 @@ module.exports = [
             },
             plugins: {
                 'hapi-swagger': {
-                  //  payloadType: 'form'
+                    //  payloadType: 'form'
                 }
             }
         }
@@ -71,11 +72,11 @@ module.exports = [
         path: '/event/getEvent',
         config: {
             description: 'getEvent',
-            auth: {strategies:[Config.APP_CONSTANTS.SCOPE.USER]},
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
             tags: ['api', 'create'],
             handler: (request, reply) => {
                 //console.log("err")
-                return Controller.Event.createEvent(request.query,request.auth.credentials)
+                return Controller.Event.viewParty(request.query, request.auth.credentials)
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -94,24 +95,23 @@ module.exports = [
             },
             plugins: {
                 'hapi-swagger': {
-                   payloadType: 'form'
+                    payloadType: 'form'
                 }
             }
         }
     },
 
-
-
     {
         method: 'POST',
-        path: '/event/images',
+        path: '/event/image',
         config: {
-            description: 'images',
+            description: 'image',
             auth: false,
             tags: ['api', 'images'],
             handler: (request, reply) => {
-                //console.log("err")
-                return Controller.Event.images(request, reply)
+                console.log("request")
+                return Controller.Event.images(request.payload, request.auth.credentials)
+
                     .then(response => {
                         return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
                     })
@@ -127,13 +127,84 @@ module.exports = [
                 allow: "multipart/form-data",
                 maxBytes: 200000000 * 1000 * 1000
             },
-            
+
+            validate: {
+
+                payload: Joi.object({
+                    file:
+                        //Joi.array().items(
+                        Joi.any().meta({ swaggerType: 'file' }).optional().description('Image File')
+                       // )
+                }),
+                // headers: UniversalFunctions.authorizationHeaderObj,
+
+                failAction: UniversalFunctions.failActionFunction
+            },
+
+
             plugins: {
                 'hapi-swagger': {
-                   payloadType: 'form'
+                    payloadType: 'form'
                 }
             }
         }
     },
+
+    // {
+    //     method: 'POST',
+    //     path: '/event/images',
+    //     config: {
+    //         description: 'images',
+    //         auth: false,
+    //         tags: ['api', 'images'],
+    //         handler: (request, reply) => {
+    //             console.log("request")
+    //             return Controller.Event.images(request.payload, request.auth.credentials)
+
+    //                 .then(response => {
+    //                     return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+    //                 })
+    //                 .catch(error => {
+    //                     winston.error("=====error=============", error);
+    //                     return UniversalFunctions.sendError("en", error, reply);
+    //                 });
+    //         },
+
+    //         payload: {
+    //             output: "stream",
+    //             parse: true,
+    //             allow: "multipart/form-data",
+    //             maxBytes: 200000000 * 1000 * 1000
+    //         },
+
+    //         validate: {
+
+    //             payload: Joi.object({
+
+
+    //                 // venue: Joi.object({
+    //                 //     name: Joi.string(),
+    //                 //     coordinates: Joi.array().items(Joi.number())
+    //                 // }),
+
+
+
+
+    //                 file:Joi.any().meta({ swaggerType: 'file' }).optional().description('Image File')
+                        
+    //             }),
+    //             // headers: UniversalFunctions.authorizationHeaderObj,
+
+    //             failAction: UniversalFunctions.failActionFunction
+    //         },
+
+
+    //         plugins: {
+    //             'hapi-swagger': {
+    //                 payloadType: 'form'
+    //             }
+    //         }
+    //     }
+    // },
 
 ]

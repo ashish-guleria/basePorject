@@ -1,2 +1,2 @@
-var OTP = Math.floor(1000+Math.random() * 9000)
-console.log(OTP)
+var d = new Date().getTime()
+console.log(d)
