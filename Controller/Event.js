@@ -55,7 +55,8 @@ const images = async (payload) => {
      
    
     let result= await upload.upload(payload)
-    //console.log("result")
+    console.log("result")
+    console.log("result")
 
 
     //console.log("--------------------------",request.payload)
