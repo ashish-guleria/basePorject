@@ -106,10 +106,9 @@ module.exports = [
         path: '/event/image',
         config: {
             description: 'image',
-            auth: false,
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
             tags: ['api', 'images'],
             handler: (request, reply) => {
-                console.log("request")
                 return Controller.Event.images(request.payload, request.auth.credentials)
 
                     .then(response => {
@@ -131,12 +130,11 @@ module.exports = [
             validate: {
 
                 payload: Joi.object({
-                    file:
-                        //Joi.array().items(
-                        Joi.any().meta({ swaggerType: 'file' }).optional().description('Image File')
-                       // )
+                    partyId: Joi.string(),
+                    file: Joi.any().meta({ swaggerType: 'file' }).optional().description('Image File')
+
                 }),
-                // headers: UniversalFunctions.authorizationHeaderObj,
+                headers: UniversalFunctions.authorizationHeaderObj,
 
                 failAction: UniversalFunctions.failActionFunction
             },
@@ -187,11 +185,8 @@ module.exports = [
     //                 //     coordinates: Joi.array().items(Joi.number())
     //                 // }),
 
+    //                 file:Joi.array().items(Joi.any().meta({ swaggerType: 'file' }).optional().description('Image File'))
 
-
-
-    //                 file:Joi.any().meta({ swaggerType: 'file' }).optional().description('Image File')
-                        
     //             }),
     //             // headers: UniversalFunctions.authorizationHeaderObj,
 

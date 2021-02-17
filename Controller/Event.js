@@ -5,11 +5,8 @@ const DAO = require('../DAOManager').queries,
     ERROR = Config.responseMessages.ERROR,
     UniversalFunctions = require('../Utils/UniversalFunctions'),
     Models = require('../Models'),
-    upload=require('../Libs/uploadManager'),
+    upload = require('../Libs/uploadManager'),
     fs = require('fs');
-
-
-
 
 const createEvent = async (payload, userDetail) => {
 
@@ -51,17 +48,29 @@ const viewParty = async (payload, userDetail) => {
 }
 
 
-const images = async (payload) => {
-     
-   
-    let result= await upload.upload(payload)
-    console.log("result")
-    console.log("result")
+const images = async (payload, userDetail) => {
 
+
+    let imgDetail = await upload.upload(payload)
+    var imgName = [];
+    const query = {
+        _id: payload.partyId
+    }
+    
+    for (var i = 0; i < imgDetail.length; i++) {
+        imgName.push(imgDetail[i].filename)
+
+    }
+    //console.log(query)
+    console.log(imgName)
+
+  let result=await DAO.update(Models.Event,query,{$push:{partyImage:imgName}},{ })
+
+    //console.log(userDetail)
 
     //console.log("--------------------------",request.payload)
 
-return result
+    return result
 
 }
 

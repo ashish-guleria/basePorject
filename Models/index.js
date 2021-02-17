@@ -5,7 +5,8 @@ module.exports = {
 
         User: require('./User'),
         Event:require('./Events'),
-        Group:require('./Group')
+        Group:require('./Group'),
+        Admin:require('./Admin')
 
 
 };

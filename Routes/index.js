@@ -1,5 +1,6 @@
 const User = require('./User');
-const Event=require('./Event')
+const Event=require('./Event');
+const Admin=require('./Admin')
 
 
 
@@ -9,7 +10,8 @@ const Event=require('./Event')
 const all = [].concat(
      
      User,
-     Event
+     Event,
+     Admin
 );
 module.exports = all;
 

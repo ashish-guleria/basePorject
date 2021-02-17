@@ -5,7 +5,9 @@ const DAO = require('../DAOManager').queries,
     TokenManager = require('../Libs/TokenManager'),
     Models = require('../Models'),
     Bcrypt = require('bcryptjs'),
-    otp = require('../Libs/otp');
+    otp = require('../Libs/otp'),
+    upload=require('../Libs/uploadManager')
+
 
 const SignUp = async (payload) => {
 
@@ -137,10 +139,38 @@ const editProfile=async(payload,userDetail)=>{
     return result
 }
 
+const uploadImages = async (payload, userDetail) => {
+
+
+    let imgDetail = await upload.upload(payload)
+    var imgName = [];
+    const query = {
+        _id: userDetail._id
+    }
+    
+    for (var i = 0; i < imgDetail.length; i++) {
+        imgName.push(imgDetail[i].filename)
+
+    }
+    //console.log(query)
+    console.log(imgName)
+
+  let result=await DAO.update(Models.User,query,{$push:{images:imgName}},{ })
+
+    //console.log(userDetail)
+
+    //console.log("--------------------------",request.payload)
+
+    return result
+
+}
+
+
 module.exports = {
     SignUp,
     Login, 
     verifyUser,
     changePassword,
-    editProfile
+    editProfile,
+    uploadImages
 }

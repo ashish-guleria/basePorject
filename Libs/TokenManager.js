@@ -49,7 +49,7 @@ var verifyToken = async (tokenData) => {
     
     var user;
     if (tokenData.scope === Config.APP_CONSTANTS.SCOPE.ADMIN) {
-        user = await DAO.getData(Models.User, { _id: tokenData._id }, { _id: 1 }, { lean: true });
+        user = await DAO.getData(Models.Admin, { _id: tokenData._id }, { _id: 1 }, { lean: true });
     }
 
     else if (tokenData.scope === Config.APP_CONSTANTS.SCOPE.BRANCH) {

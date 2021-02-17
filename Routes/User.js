@@ -201,11 +201,52 @@ module.exports = [
         }
     },
 
+    {
+        method: 'POST',
+        path: '/user/uploadImage',
+        config: {
+            description: 'uploadImage',
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.USER] },
+            tags: ['api', 'images'],
+            handler: (request, reply) => {
+                return Controller.User.uploadImages(request.payload, request.auth.credentials)
+
+                    .then(response => {
+                        return UniversalFunctions.sendSuccess("en", SUCCESS.DEFAULT, response, reply);
+                    })
+                    .catch(error => {
+                        winston.error("=====error=============", error);
+                        return UniversalFunctions.sendError("en", error, reply);
+                    });
+            },
+
+            payload: {
+                output: "stream",
+                parse: true,
+                allow: "multipart/form-data",
+                maxBytes: 200000000 * 1000 * 1000
+            },
+
+            validate: {
+
+                payload: Joi.object({
+                   
+                    file: Joi.any().meta({ swaggerType: 'file' }).optional().description('Image File')
+
+                }),
+                headers: UniversalFunctions.authorizationHeaderObj,
+
+                failAction: UniversalFunctions.failActionFunction
+            },
 
 
-
-
-
+            plugins: {
+                'hapi-swagger': {
+                    payloadType: 'form'
+                }
+            }
+        }
+    },
 
 
 ]

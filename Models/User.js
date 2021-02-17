@@ -22,7 +22,7 @@ var User = new Schema({
     phoneNumber: { type: String, require: true },
     password: { type: String, require: true },
     bio: { type: String },
-    imgUrl: [{ type: String }],
+    images: [{ type: String }],
     otp: { type: Number },
     verifyId: { type: String },
     isVerify: { type: Boolean, default: false },
