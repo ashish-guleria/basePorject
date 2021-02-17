@@ -42,7 +42,7 @@ const createEvent = async (payload, userDetail) => {
 const viewParty = async (payload, userDetail) => {
 
     let result = await DAO.getData(Models.Event, {}, {})
-    console.log(result)
+    //console.log(result)
     return result
 
 }

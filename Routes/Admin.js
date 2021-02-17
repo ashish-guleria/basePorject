@@ -43,12 +43,13 @@ module.exports = [
     },
 
 
+    
     {
         method: 'Get',
         path: '/admin/getUsersList',
         config: {
             description: 'getUsersList',
-            auth:{strategies:[Config.APP_CONSTANTS.SCOPE.ADMIN]},
+            auth: { strategies: [Config.APP_CONSTANTS.SCOPE.ADMIN] },
             tags: ['api', 'getUsersList'],
             handler: (request, reply) => {
                 return Controller.Admin.userList(request.query, request.auth.credentials)
@@ -60,13 +61,14 @@ module.exports = [
                         return UniversalFunctions.sendError("en", error, reply);
                     });
             },
+
             validate: {
                 query: Joi.object({
-                   
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,
                 failAction: UniversalFunctions.failActionFunction
             },
+
             plugins: {
                 'hapi-swagger': {
 
@@ -76,9 +78,6 @@ module.exports = [
             }
         }
     },
-
-    
-
 
 
 ]

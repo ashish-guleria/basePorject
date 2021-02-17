@@ -36,7 +36,8 @@ module.exports = [
                     eventName: Joi.string(),
                     venue: Joi.object({
                         name: Joi.string(),
-                        coordinates: Joi.array().items(Joi.number())
+                        longitude: Joi.number(),
+                        latitude:Joi.number()
                     }),
 
                     startingTime: Joi.date(),
@@ -52,7 +53,7 @@ module.exports = [
                     ),
 
                     hostingEventAs: Joi.string(),
-                    partyImages: Joi.array().items(Joi.string()),
+                    partyImage: Joi.array().items(Joi.string()),
 
                 }),
                 headers: UniversalFunctions.authorizationHeaderObj,

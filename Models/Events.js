@@ -6,7 +6,7 @@ var Config = require('../Config');
 
 var Event = new Schema({
     eventName:{type:String},
-    venue: { name: { type: String }, coordinates: [Number] },
+    venue: { name: { type: String }, longitude: {type:Number},latitude:{type:Number} },
     
     price: { type: Number },
     startingTime: { type : Date },
