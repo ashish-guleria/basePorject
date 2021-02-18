@@ -2,15 +2,16 @@ const { string } = require('@hapi/joi');
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+
 var Config = require('../Config');
 
+
 var Event = new Schema({
-    eventName:{type:String},
-    venue: { name: { type: String }, longitude: {type:Number},latitude:{type:Number} },
-    
+    eventName: { type: String },
+    venue: { name: { type: String }, longitude: { type: Number }, latitude: { type: Number } },
     price: { type: Number },
-    startingTime: { type : Date },
-    endingTime: { type : Date },
+    startingTime: { type: Date },
+    endingTime: { type: Date },
     description: { type: String },
     guestLimit: { type: Number },
     Category: {
@@ -25,7 +26,7 @@ var Event = new Schema({
     },
     hostingEventAs: { type: String },
     partyImage: [{ type: String }],
-    userId:{ type: Schema.ObjectId, ref: 'User' },
+    userId: { type: Schema.ObjectId, ref: 'User' },
     rating: [{
         userId: { type: Schema.ObjectId, ref: 'User' },
         rate: { type: Number, require: true },
@@ -43,7 +44,7 @@ var Event = new Schema({
 
         rejected: [{ type: Schema.ObjectId, ref: 'User' }],
 
-        userPressNah:[{type:Schema.ObjectId, ref:'User'}]
+        userPressNah: [{ type: Schema.ObjectId, ref: 'User' }]
     },
 
 })

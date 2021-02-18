@@ -12,8 +12,8 @@ const util = require('util');
 const fs = require('fs');
 
 //Connect to MongoDB
-mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useNewUrlParser: true }).then(success => {
-    winston.info('MongoDB Connected');
+mongoose.connect(Config[process.env.NODE_ENV].mongoDb.URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true ,useFindAndModify:false}).then(success => {
+    console.log('MongoDB Connected');
     Run();
 }).catch(err => {
     console.log("====================", err)
@@ -28,7 +28,7 @@ const Run = async () => {
     /*-------------------------------------------------------------------------------
      * add admin
      * -----------------------------------------------------------------------------*/
-    
+
     let password = "$2a$11$pE0.MuSdZNgTPVrLfaQvCeNqlyL4ztCqzNYF1JWWECthtujmB4ZBe";
 
     let adminDetails = {
@@ -57,7 +57,7 @@ const CreateAdmin = async (adminDetails) => {
     return new Promise((resolve, reject) => {
         try {
             console.log("===================================================================");
-            
+
             let adminData = DAO.findAndUpdate(Models.Admin, { email: adminDetails.email }, adminDetails, { lean: true, upsert: true, new: true });
 
             return resolve("Admin Added");
@@ -85,6 +85,6 @@ function checkFolderAlreadyExist() {
         console.log('folder already exist ');
     }
 }
-module.exports = {
-    Run
-}
+// module.exports = {
+//     Run
+// }

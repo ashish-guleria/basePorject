@@ -6,7 +6,7 @@ const DAO = require('../DAOManager').queries,
     Models = require('../Models'),
     Bcrypt = require('bcryptjs'),
     otp = require('../Libs/otp'),
-    upload=require('../Libs/uploadManager')
+    upload = require('../Libs/uploadManager')
 
 
 const SignUp = async (payload) => {
@@ -21,16 +21,16 @@ const SignUp = async (payload) => {
     }
 
     payload.password = Bcrypt.hashSync(payload.password, Config.APP_CONSTANTS.SERVER.SALT);
-    var newOtp=await otp.otp()
-    
-    let saveData={
-        email:payload.email,
-        fullName:payload.fullName,
-        gender:payload.gender,
-        dob:payload.dob,
-        phoneNumber:payload.phoneNumber,
-        password:payload.password,
-        otp:newOtp
+    var newOtp = await otp.otp()
+
+    let saveData = {
+        email: payload.email,
+        fullName: payload.fullName,
+        gender: payload.gender,
+        dob: payload.dob,
+        phoneNumber: payload.phoneNumber,
+        password: payload.password,
+        otp: newOtp
     }
     result = await DAO.saveData(Models.User, saveData);
 
@@ -43,30 +43,30 @@ const SignUp = async (payload) => {
     return {
         accessToken,
         user: {
-            ...payload
+            ...result
         }
     }
 }
 
-const verifyUser=async (payload)=>{
+const verifyUser = async (payload) => {
 
-    const {otp,userId}=payload
-    
+    const { otp, userId } = payload
+
     let result = await DAO.getData(Models.User, userId, {}, {});
-   // console.log(result[0].otp)
-    if(otp===result[0].otp){
-        var verify={
-            isVerify:true
+    // console.log(result[0].otp)
+    if (otp === result[0].otp) {
+        var verify = {
+            isVerify: true
         }
-    }else{
-        verify={
+    } else {
+        verify = {
 
-            isVerify:false
+            isVerify: false
         }
     }
-    
-   const data = await DAO.findAndUpdate(Models.User,{_id:result[0]._id}, verify,{new: true});
-   
+
+    const data = await DAO.findAndUpdate(Models.User, { _id: result[0]._id }, verify, { new: true });
+
 }
 
 const Login = async (payload) => {
@@ -77,9 +77,7 @@ const Login = async (payload) => {
         const query = {
             email,
         };
-        //console.log("Result")
         const result = await DAO.getDataOne(Models.User, query, {});
-        console.log("Module")
 
         if (result === null) throw ERROR.INVALID_CREDENTIALS;
         const checkPassword = Bcrypt.compareSync(password, result.password); //compare password string to encrypted string
@@ -108,33 +106,33 @@ const Login = async (payload) => {
     }
 }
 
-const changePassword=async (payload,userDetail)=>{
-    var {oldPassword,newPassword}=payload
+const changePassword = async (payload, userDetail) => {
+    var { oldPassword, newPassword } = payload
 
     var checkPassword = Bcrypt.compareSync(oldPassword, userDetail.password);
-    if(!checkPassword) throw ERROR.INVALID_CREDENTIALS
+    if (!checkPassword) throw ERROR.INVALID_CREDENTIALS
 
-    newPassword = Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);  
-    console.log(userDetail._id,newPassword)
- 
-     const result=await DAO.findAndUpdate(Models.User,{_id:userDetail._id},{password:newPassword},{})
+    newPassword = Bcrypt.hashSync(newPassword, Config.APP_CONSTANTS.SERVER.SALT);
+    console.log(userDetail._id, newPassword)
 
-   return(result)
+    const result = await DAO.findAndUpdate(Models.User, { _id: userDetail._id }, { password: newPassword }, {})
+
+    return (result)
 
 }
 
-const editProfile=async(payload,userDetail)=>{
-    query={
-        name:payload.name,
-        gender:payload.gender,
-        dob:payload.dob,
-        bio:payload.bio
+const editProfile = async (payload, userDetail) => {
+    query = {
+        name: payload.name,
+        gender: payload.gender,
+        dob: payload.dob,
+        bio: payload.bio
     }
 
-    let result=await DAO.findAndUpdate(Models.User,{_id:userDetail._id},query)
+    let result = await DAO.findAndUpdate(Models.User, { _id: userDetail._id }, query)
 
 
-    console.log(payload,"---------------------------------------",userDetail)
+    console.log(payload, "---------------------------------------", userDetail)
 
     return result
 }
@@ -147,7 +145,7 @@ const uploadImages = async (payload, userDetail) => {
     const query = {
         _id: userDetail._id
     }
-    
+
     for (var i = 0; i < imgDetail.length; i++) {
         imgName.push(imgDetail[i].filename)
 
@@ -155,7 +153,7 @@ const uploadImages = async (payload, userDetail) => {
     //console.log(query)
     console.log(imgName)
 
-  let result=await DAO.update(Models.User,query,{$push:{images:imgName}},{ })
+    let result = await DAO.update(Models.User, query, { $push: { images: imgName } }, {})
 
     //console.log(userDetail)
 
@@ -168,7 +166,7 @@ const uploadImages = async (payload, userDetail) => {
 
 module.exports = {
     SignUp,
-    Login, 
+    Login,
     verifyUser,
     changePassword,
     editProfile,

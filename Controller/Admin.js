@@ -45,17 +45,43 @@ const Login = async (payload) => {
     }
 }
 
-
 const userList = async (payload) => {
     const result = DAO.getData(Models.User, {}, {})
     return result
+}
 
-
+const blockUser = async (payload) => {
+    const query = { _id: payload.userId }
+    const result = await DAO.findAndUpdate(Models.User, query, { isBlock: true })
+    return result
 
 }
+
+const getEvents = async (payload) => {
+    const result = await DAO.getData(Models.Event, {}, {})
+    return result
+}
+
+const upComingEvents = async (payload) => {
+
+    const result = DAO.getData(Models.Event, { startingTime: { $gte: new Date() } })
+    return result
+
+}
+const pastEvents = async (payload) => {
+    const result = DAO.getData(Models.Event, { startingTime: { $lte: new Date() } })
+    return result
+}
+
+
 
 
 module.exports = {
     Login,
-    userList
+    userList,
+    blockUser,
+    getEvents,
+    upComingEvents,
+    pastEvents
+
 }
